@@ -20,7 +20,7 @@ jobs:
 
       - name: Build an image from Dockerfile
         run: |
-          docker build -t docker.io/marinamagaldib/fastapi-app:${{ github.sha }} ./helloworld
+          docker build -t docker.io/marinamagaldib/fastapi-app:${{ github.sha }} .
 
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@0.20.0

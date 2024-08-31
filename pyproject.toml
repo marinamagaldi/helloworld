@@ -6,9 +6,10 @@ authors = ["Marina <marinamagaldib@hotmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "3.10.*"
-fastapi = {extras = ["standard"], version = "^0.112.2"}
+python = "3.12.*"
 
+[tool.poetry.scripts]
+start = "uvicorn:fast_zero.app:app"
 
 [build-system]
 requires = ["poetry-core"]

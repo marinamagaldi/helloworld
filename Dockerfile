@@ -24,6 +24,6 @@ COPY . .
 RUN pip install fastapi uvicorn
 
 # Comando para iniciar a aplicação
-CMD ["uvicorn", "fast_zero.app:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "helloworld.app:app", "--host", "0.0.0.0", "--port", "8000"]
 
 

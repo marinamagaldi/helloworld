@@ -2,6 +2,7 @@ name: Build Docker Actions
 on:
   push:
     branches: [ main ]
+
 jobs:
   build:
     runs-on: ubuntu-22.04
@@ -9,11 +10,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: List files in root directory
-        run: ls -R
-
       - name: Build the Docker image
-        run: docker build -f Dockerfile -t marinamagaldib/fastapi-app:${{ github.sha }} 
+        run: |
+          docker build -f Dockerfile -t marinamagaldib/fastapi-app:${{ github.sha }} .
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
@@ -23,3 +22,4 @@ jobs:
 
       - name: Push the Docker image
         run: docker push marinamagaldib/fastapi-app:${{ github.sha }}
+

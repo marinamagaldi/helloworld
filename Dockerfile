@@ -17,6 +17,9 @@ RUN pip install --upgrade pip
 # Defina o diretório de trabalho
 WORKDIR /app
 
+# Listar o conteúdo do diretório de trabalho
+RUN ls -la
+
 # Copie o código da aplicação para o diretório /app
 COPY . .
 
@@ -24,6 +27,6 @@ COPY . .
 RUN pip install fastapi uvicorn
 
 # Comando para iniciar a aplicação
-CMD ["uvicorn", "helloworld.app:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "projetos.helloworld.app:app", "--host", "0.0.0.0", "--port", "8000"]
 
 

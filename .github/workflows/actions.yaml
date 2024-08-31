@@ -12,14 +12,8 @@ jobs:
       - name: List files in root directory
         run: ls -R
 
-      - name: List files in projetos directory
-        run: ls -R projetos
-
-      - name: List files in helloworld directory
-        run: ls -R projetos/helloworld
-
       - name: Build the Docker image
-        run: docker build -f projetos/helloworld/Dockerfile -t marinamagaldib/fastapi-app:${{ github.sha }} projetos/helloworld/
+        run: docker build -f Dockerfile -t marinamagaldib/fastapi-app:${{ github.sha }} 
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v3

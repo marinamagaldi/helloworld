@@ -9,8 +9,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: List files in projetos directory
+        run: ls -R projetos
+
       - name: Build the Docker image
-        run: docker build -f projetos/helloworld/Dockerfile -t marinamagaldib/fastapi-app:${{ github.sha }} .
+        run: docker build -f projetos/helloworld/Dockerfile -t marinamagaldib/fastapi-app:${{ github.sha }} projetos/helloworld/
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
@@ -19,4 +22,4 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Push the Docker image
-        run: docker push marinamagaldib/fastapi-app:${{ github.sha }} #tag dinâmica para não sobreescrever a imagem
+        run: docker push marinamagaldib/fastapi-app:${{ github.sha }}

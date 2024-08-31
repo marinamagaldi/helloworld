@@ -9,7 +9,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: List files in projetos directory
+      - name: List files in helloworld directory
         run: ls -R helloworld
 
       - name: Build the Docker image

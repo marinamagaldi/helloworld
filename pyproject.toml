@@ -1,15 +1,16 @@
 [tool.poetry]
-name = "fast-zero"
+name = "helloworld"
 version = "0.1.0"
 description = ""
 authors = ["Marina <marinamagaldib@hotmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "3.12.*"
+python = "3.11.*"
+fastapi = {extras = ["standart"], version = "^0.112.2"}
 
 [tool.poetry.scripts]
-start = "uvicorn:fast_zero.app:app"
+start = "uvicorn: app:app"
 
 [build-system]
 requires = ["poetry-core"]

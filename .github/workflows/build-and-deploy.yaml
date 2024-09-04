@@ -1,0 +1,57 @@
+name: Build and Deploy Docker Image
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Checkout Dockerfile repo
+        uses: actions/checkout@v3
+        with:
+          repository: marinamagaldi/helloworld
+          token: ${{ secrets.ACCESS_TOKEN_FOR_OTHER_REPO }}
+          path: dockerfile-repo
+
+      - name: Set up Minikube Kubeconfig ## configuração para cluster rodando local
+        run: |
+          mkdir -p $HOME/.kube
+          echo "${{ secrets.MINIKUBE_KUBECONFIG }}" > $HOME/.kube/config
+
+      - name: Verify Kubernetes Context
+        run: |
+          kubectl config current-context
+
+      - name: Atualizar tag
+        run: |
+          cd mychart
+          pwd
+          ls -a
+          sed -i 's|image:.*|image: '${{ github.sha }}'|' values.yaml
+        env:
+          GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN_OPS }}
+
+      - name: Verificar valores.yaml
+        run: |
+          cd mychart
+          cat values.yaml
+
+      - name: Commit e Push das alterações
+        run: |
+          cd mychart
+          pwd
+          ls -a
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git add values.yaml
+          git commit -m "update docker tag para: ${{ github.sha }}"
+          git remote set-url origin https://x-access-token:${{ secrets.ACCESS_TOKEN_OPS }}@github.com/marinamagaldi/gitops.git
+          git push origin main
+        env:
+          GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN_OPS }}

@@ -9,44 +9,50 @@ jobs:
   build:
     runs-on: ubuntu-22.04
     steps:
+      # Checkout the main repository
       - name: Checkout code
         uses: actions/checkout@v3
 
+      # Build the Docker image
       - name: Build the Docker image
         run: |
           docker build -f Dockerfile -t marinamagaldib/fastapi-app:${{ github.sha }} .
 
+      # Log in to Docker Hub
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
+      # Push the Docker image
       - name: Push the Docker image
         run: docker push marinamagaldib/fastapi-app:${{ github.sha }}
 
+      # Checkout the gitops repository
       - name: Checkout gitops repo
         uses: actions/checkout@v3
         with:
           repository: marinamagaldi/gitops
           token: ${{ secrets.ACCESS_TOKEN_OPS }}
-          path: mychart
+          path: gitops  # Use 'gitops' as the path
 
+      # Update the Docker tag in values.yaml
       - name: Atualizar tag no values.yaml
         run: |
-          pwd
-          ls -a gitops/mychart
-          cd gitops/mychart  
-          ls -la
+          cd gitops/mychart
           sed -i '/image:/!b;n;s|tag:.*|tag: '${{ github.sha }}'|' values.yaml
 
-      - name: Verificar valores.yaml
+      # Verify the updated values.yaml
+      - name: Verificar values.yaml
         run: |
           cd gitops/mychart
           cat values.yaml
 
+      # Commit and push changes to the gitops repository
       - name: Commit e Push das alterações para gitops
         run: |
+          cd gitops
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
           git add mychart/values.yaml

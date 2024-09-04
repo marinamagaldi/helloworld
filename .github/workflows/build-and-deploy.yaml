@@ -41,12 +41,10 @@ jobs:
       - name: Atualizar tag no values.yaml
         run: |
           cd gitops/mychart
+          echo "Before update:"
+          cat values.yaml
           sed -i '/image:/!b;n;s|tag:.*|tag: '${{ github.sha }}'|' values.yaml
-
-      # Verify the updated values.yaml
-      - name: Verificar values.yaml
-        run: |
-          cd gitops/mychart
+          echo "After update:"
           cat values.yaml
 
       # Commit and push changes to the gitops repository
@@ -56,7 +54,8 @@ jobs:
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
           git add mychart/values.yaml
-          git commit -m "update docker tag para: ${{ github.sha }}"
+          git status  # Check the status to ensure changes are detected
+          git commit -m "update docker tag para: ${{ github.sha }}" || echo "No changes to commit"
           git remote set-url origin https://x-access-token:${{ secrets.ACCESS_TOKEN_OPS }}@github.com/marinamagaldi/gitops.git
           git push origin main
         env:

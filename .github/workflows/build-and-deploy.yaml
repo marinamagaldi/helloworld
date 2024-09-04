@@ -34,12 +34,12 @@ jobs:
 
       - name: Atualizar tag no values.yaml
         run: |
-          cd /mychart  
-          sed -i 's|image:.*|image: marinamagaldib/fastapi-app:${{ github.sha }}|' values.yaml
+          cd ./mychart  
+          sed -i '/image:/!b;n;s|tag:.*|tag: '${{ github.sha }}'|' values.yaml
 
       - name: Verificar valores.yaml
         run: |
-          cd /mychart
+          cd ./mychart
           cat values.yaml
 
       - name: Commit e Push das alterações para gitops
